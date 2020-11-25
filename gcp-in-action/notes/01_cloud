@@ -1,0 +1,118 @@
+-------------------------------------------------------------------------------
+| CHAPTER 1 - THE CLOUD                                                       |
+-------------------------------------------------------------------------------
+
+- Cloud Services
+
+    - Computing
+    - Storage
+    - Big Data Analytics
+    - Networking
+    - Pricing
+
+
+
+- Google Cloud Storage provides a managed CDN that provides edge caching to make resources
+    quickly available in different geographic regions.
+
+
+
+- Example Projects
+
+    - ToDo List = simplest possible app that stores and retrieves data
+    - InstaSnap = social media site that was built quickly and now needs to scale up fast
+    - E*Exchange = stock-trading application with stringent regulatory requirements
+
+
+
+- Projects
+
+    - Isolated container for resources
+    - For instance, if we create a new VM, it will be owned by the parent project
+    - Gets its own billing, useful if you have multiple clients
+    - Segment roles for security, access and credentials are granted per project
+    - The creator of a project can access all projects they created
+
+
+
+- Installing the SDK
+
+    1. Download and extract the SDK
+
+         $ curl -O https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/
+                     google-cloud-sdk-319.0.0-linux-x86_64.tar.gz
+
+         $ tar -xvf https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/
+                     google-cloud-sdk-319.0.0-linux-x86_64.tar.gz
+
+         * Note: Don't use aptitude to install the sdk, since it won't include the
+             gcloud package manager.
+
+
+    2. Install the SDK and update any components.
+
+         $ ./google-cloud-sdk/install.sh
+         $ gcloud components update
+
+
+    3. Initialize the SDK.  This includes authorizing the SDK to use your user account
+         credentials.
+
+         $ gcloud init
+
+
+
+- Other gcloud Commands
+
+    1. To log in from the command prompt (a web tab will be opened):
+
+         $ gcloud auth login
+
+       To also save credentials for later logins:
+
+         $ gcloud auth application-default login
+
+
+    2. To switch projects:
+
+         $ gcloud config set project PROJECT_ID
+
+
+
+- Adding a New VM
+
+    - In our first project, click
+        > Compute Engine > VM Instances > Create
+
+    - VM names must be unique within a project.
+
+    - Once the VM is created, click the 'SSH' button to get a shell.
+
+
+
+- Using the SDK Command Line
+
+    - List the VM instances in our project:
+
+        $ gcloud compute instances list
+
+
+    - Connect to our VM:
+
+        $ gcloud compute ssh learning-cloud-demo
+
+
+    - Under the hood, Google is:
+
+        1. Using the credentials it obtained when you ran 'gcloud auth login'
+        2. Generating a new public/private key pair
+        3. Securely putting the new public key onto the virtual machine
+        4. Using the private key generated to connect to the machine
+
+
+
+- Writing Code to Interact with VMs
+
+    - First, install the Google Cloud client library for node.js.
+
+        $ npm install --save @google-cloud/compute@0.7.1
