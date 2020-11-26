@@ -116,3 +116,9 @@
     - First, install the Google Cloud client library for node.js.
 
         $ npm install --save @google-cloud/compute@0.7.1
+
+
+    - Now, we can run our scripts.
+
+        $ node show_vms.js
+        $ node show_and_stop_vms.js

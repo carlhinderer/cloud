@@ -1,0 +1,70 @@
+-------------------------------------------------------------------------------
+| CHAPTER 2 - DEPLOYING WORDPRESS                                             |
+-------------------------------------------------------------------------------
+
+- For our WordPress installation, we will need:
+
+    1. A VM with WordPress and Apache installed
+    2. A SQL database
+
+
+
+- To start a cloud SQL instance:
+
+    > Cloud Console > Storage > SQL > Create Instance
+
+    name: wordpress-db
+    pw: longpassword!
+    version: MySQL 5.7
+
+
+    - By default, Cloud SQL starts with a 10GB SSD, and the size of the disk
+        automatically increases as needed.
+
+
+    - Now we can see our new SQL instance from the SDK console:
+
+        $ gcloud sql instances list
+
+
+
+- Securing the Cloud SQL Instance
+
+    - Change the password for the root user
+
+        $ gcloud sql users set-password root --host "%" --password "longpassword2!" 
+                --instance wordpress-db
+
+
+    - Now, for testing, we'll temporarily open the SQL instance to the outside world.  We'll
+        add '0.0.0.0/0', which means all possible IP addresses.  Obviously, we should never have
+        a production database set up like this.
+
+        > Cloud SQL Instance > Connections > Authorized Networks > Add Network
+        > CIDR: 0.0.0.0/0
+
+
+
+- Connecting to the Cloud SQL Instance
+
+    - First, we need to install the MySQL client locally.
+
+        $ sudo apt-get install -y mysql-client
+
+
+    - Now, we can connect to our cloud instance:
+
+        # Get ip address
+        $ gcloud sql instances list
+
+        # Connect to cloud instance
+        $ mysql -h 104.197.207.227 -u root -p
+
+
+    - Connected to our cloud instance, let's create the database.
+
+        mysql> CREATE DATABASE wordpress;
+
+        mysql> CREATE USER wordpress IDENTIFIED BY 'very-long-wordpress-password';
+
+        mysql> GRANT ALL PRIVILEGES ON wordpress.* TO wordpress;
