@@ -109,3 +109,58 @@
 
         # Verify mcrypt module is present
         php -m | grep mcrypt
+
+
+
+- Install Wordpress on the VM
+
+    - Download the latest version of WordPress to the VM:
+
+        $ sudo apt install wget
+        $ wget http://wordpress.org/latest.tar.gz
+        $ tar xzvf latest.tar.gz
+
+
+    - Copy the sample config file:
+
+        $ cd wordpress
+        $ cp wp-config-sample.php wp-config.
+
+
+    - Edit it to reflect our MySQL installation:
+
+        /** MySQL settings - You can get this info from your web host **/
+
+        /** The name of the database for WordPress */
+        define('DB_NAME', 'wordpress');
+
+        /** MySQL database username */
+        define('DB_USER', 'wordpress');
+
+        /** MySQL database password */
+        define('DB_PASSWORD', 'very-long-wordpress-password');
+
+        /** MySQL hostname */
+        define('DB_HOST', '104.197.207.227');
+
+
+    - Now, we move the WordPress files into a location so that Apache can serve them.
+
+        # Remove default Apache page
+        $ sudo rm /var/www/html/index.html
+
+        # Move WordPress files
+        $ sudo apt install rsync
+        $ sudo rsync -avP ~/wordpress/ /var/www/html/
+
+
+    - Now, we should be able to navigate to the WordPress site:
+
+        http://34.122.115.14
+
+
+    - Finally, for security, we should change the IPs that are allowed to connect to the
+        database from all ('0.0.0.0/0') to only our VM ('34.122.115.14/32').
+
+      The VM of our IP address could change, so we'll learn how to reserve a static IP 
+        address later.
