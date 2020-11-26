@@ -68,3 +68,44 @@
         mysql> CREATE USER wordpress IDENTIFIED BY 'very-long-wordpress-password';
 
         mysql> GRANT ALL PRIVILEGES ON wordpress.* TO wordpress;
+
+        # Reload privileges without restarting
+        mysql> FLUSH PRIVILEGES;
+
+
+
+- Creating the WordPress VM
+
+    - Create a new VM:
+
+        name: wordpress
+        http and https: enabled
+
+
+    - Connect to it:
+
+        $ gcloud compute ssh --zone us-central1-a wordpress
+
+
+    - Install Apache, the MySQL client, and PHP:
+
+        $ sudo apt update
+
+        $ sudo apt install apache2 
+        $ sudo apt install default-mysql-client
+        $ sudo apt install php7.0
+        $ sudo apt install php-mysql 
+        $ sudo apt install libapache2-mod-php php-gd
+
+
+    - Install mcrypt PHP package:
+
+        # Install prereqs
+        $ sudo apt install php-dev libmcrypt-dev php-pear
+
+        # Install mcrypt module
+        $ sudo pecl channel-update pecl.php.net
+        $ sudo pecl install mcrypt
+
+        # Verify mcrypt module is present
+        php -m | grep mcrypt
