@@ -1,0 +1,68 @@
+-------------------------------------------------------------------------------
+| PART B - COOKIES                                                            |
+-------------------------------------------------------------------------------
+
+- Web Cookies
+
+    - An HTTP cookie is a small amount of text that helps a website track information
+        about a user across multiple pages of the website and personalize their user
+        experience.
+
+        1. A browser requests a website.
+
+             GET /index.html HTTP/1.1
+             Host: www.shoopshop.com
+
+
+        2. A server sends a cookie with the response.
+
+             HTTP/1.0 200 OK
+             Content-type: text/html
+             Set-Cookie: sessionId=abc123; Expires=Wed, 09 Jun 2021 10:18:14 GMT
+
+           If it wanted to, it could also add more 'Set-Cookie' headers to the response.
+
+
+        3. The browser stores the cookie.  This way, it will persist even after restarting
+             the browser.  This is why it's called a 'persistent cookie'.
+
+           There are also 'session cookies', which have no expiration date and are deleted
+             when the browser is closed.
+
+
+        4. The browser then sends the cookie with each subsequent HTTP request.  
+
+             GET /shop.html HTTP/1.1
+             Cookie: sessionId=abc123
+
+
+        5. The server personalized responses based on the value of the cookie.
+
+
+
+- Example Uses of Cookies
+
+    - Remember how many results a user prefers seeing per page.
+    - Recommend related headlines or related products.
+    - Track analytics, like how long a user has spent on a page or what buttons they clicked.
+    - Keep a user logged in.
+
+
+
+- Third Party Cookies
+
+    - Each cookie stored by a browser is associated with a domain and path.  When
+        you visit a website and its server sends back an HTTP response with a 
+        cookie, the browser associates that cookie with the domain of the server.
+        This is called a 'first-party cookie'.
+
+    - A website can also include resources from other domains, like an image, iframe,
+        or script.  When the browser requests those resources, they can send back their
+        own cookies, which will be associated with their domains.  These are called
+        'third party cookies'.
+
+    - In a 2016 study, the average website loaded 20 cookies.  The average news site
+        loaded twice that many!  Most are used for advertising.
+
+    - A website can track a user's browsing history across other websites by using
+        third-party cookies, as long as each site loads the cookie from the same domain.
