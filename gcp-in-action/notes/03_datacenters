@@ -1,0 +1,137 @@
+-------------------------------------------------------------------------------
+| CHAPTER 3 - CLOUD DATA  CENTERS                                             |
+-------------------------------------------------------------------------------
+
+- Zone Overview for Google Cloud
+
+    Region           Location                Number of data centers
+    -----------------------------------------------------------------
+    Total                                    44
+    -----------------------------------------------------------------
+    Eastern US       South Carolina, USA     3
+    Eastern US       North Virginia, USA     3
+    Central US       Iowa, USA               4
+    Western US       Oregon, USA             3
+
+    Canada           Montréal, Canada        3
+    South America    São Paulo, Brazil       3
+
+    Western Europe   London, UK              3
+    Western Europe   Belgium                 3
+    Western Europe   Frankfurt, Germany      3
+    Western Europe   Netherlands             2
+
+    South Asia       Mumbai, India           3
+    South East Asia  Singapore               2
+    East Asia        Taiwan                  3
+    North East Asia  Tokyo, Japan            3
+    Australia        Sydney, Australia       3
+
+
+
+- Reasons you may need to consider the specific location of the data centers:
+
+    1. Ultra-low-latency requirements, like with high-frequency trading
+    2. Customer base far from data centers, like in Africa or Australia
+
+
+
+- Isolation Levels and Fault Tolerance
+
+    - Zones
+
+        - A zone is the smallest unit in which a resource can exist.  A zone can be 
+            thought of as a single building or cluster of buildings.
+
+        - A natural disaster or power outage could take out the entire zone.
+
+        - Latency within a zone is very low.
+
+
+    - Regions
+
+        - A region is a collection of zones, and corresponds loosely to a city.
+
+        - Resources that are in the same region, but different zones (for example 'us-east1-b'
+            and 'us-east1-c'), should still have pretty low latency.
+
+        - Resources in different zones are isolated from zone-specific failures, but not
+            region-level failures like natural disasters.
+
+
+    - Designing for Fault Tolerance
+
+        - Zonal
+            - If the zone goes down, the service goes down
+
+        - Regional
+            - Service is replicated throughout multiple zones in a single region
+
+            - For instance, a MongoDB instance is located in 'us-east1-b' and a hot
+                failover is located in 'us-east1-c'
+
+            - Much safer than zonal, but still not enough redundancy for mission-critcal systems
+
+        - Multiregional
+            - Composed of several different regional services
+
+        - Global
+            - Multiregional service that is spread around the world
+
+            - Crosses legal jurisdictions and network providers
+
+            - Will often want to use multiple cloud providers for even more redundancy
+
+
+    - Automatic High Availability
+
+        - Google Cloud Storage provides multiregional fault isolation for storage needs.
+
+        - Google Cloud Datastorage provides non-relational storage the same way.
+
+        - Using these services requires some additional thinking about your architecture.
+
+
+
+- Safety Concerns - Security
+
+    - Any data stored in the cloud is most likely located on more than one disk drive.
+
+
+    - 3 Typical Security Goals
+
+        1. Privacy = only authorized people have access
+        2. Availability = resources should always be accessible to authorized people
+        3. Durability = the resources should never be corrupted or go missing
+
+
+    - Cloud Providers Strategy for Dealing with Risks
+
+        1. Secure Facilities
+        2. Encryption (anything stored on disk)
+        3. Replication
+        4. Backups (off-site)
+
+
+- Safety Concerns - Privacy
+
+    - Google Cloud Storage will keep your photo in an encrypted form, but when it arrives
+        back to you, it is unencrypted.  This is because Google has the encryption keys.
+
+    - If Google receives a court order, they will decrypt your data and hand it over.
+
+
+- Safety Concerns - Special Cases
+
+    - Some special situations require heightened levels of security or privacy.  For example:
+
+        - Governement agencies often have strict requirements
+        - Companies in US health care must comply with HIPAA regulations
+        - Companies dealing with personal data of German citizens must comply with BDSG
+
+
+    - Solutions to these problems include:
+
+        - Amazon offers GovCloud for government agencies
+        - Google, Azure, and AWS will all sign BAAs to support HIPAA-covered customers
+        - Azure and Amazon offer data centers in Germany to comply with BDSG
