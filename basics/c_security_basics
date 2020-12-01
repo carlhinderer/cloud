@@ -1,0 +1,142 @@
+-------------------------------------------------------------------------------
+| PART C - SECURITY BASICS                                                    |
+-------------------------------------------------------------------------------
+
+- Using VPNs
+
+    - If you send a request via HTTP, the ISP can see the entire contents of the 
+        request.  If you use HTTPS, the contents of your request will be hidden, but
+        the domain name will still be visible.
+
+    - Governments also have backdoors into routers, so they can see the requests.
+
+    - With a VPN,
+
+        1. The computer sends a packet of encrypted data to the VPN server domain.
+
+        2. The VPN server decrypts the data, finds out where the user wants to send
+             the packet, then forwards the packet to the destination.
+
+    - The VPN will know the user's browsing history, but the ISP does not.  Other
+        routers after the VPN will see only the VPN IP address, not the user's IP
+        address.
+
+
+
+- Using Tor
+
+    - Tor is an open source program for anonymizing internet traffic.  When using Tor,
+        the computer sends an encrypted packet through a large number of volunteer
+        relays.  
+
+    - Each relay only knows where it came from and where it's going, and no relay knows 
+        both the source and destination IP addresses.
+
+
+
+- Geolocation
+
+    - GPS
+
+        - Started by US Government in 1973, now controls 30 satellites
+
+        - GPS receivers are tiny sensors with antennas that receive radio signals
+            from the satellites.
+
+        - If a sensor can receive signals from at least 4 satellites, the receiver
+            can calculate its position using trilateration.
+
+        - Works best in an outdoor environment with a clear view of the sky.
+
+        - Smartphones can typically record a geolocation to within 5m in open sky.
+
+        - Is affected by roofs, walls, or other physical barriers, but is still the 
+            most precise source of geolocation data.
+
+
+    - WiFi Positioning System
+
+        - Works well in dense, urban areas where GPS does not work as well
+
+        - A device with a WiFi antenna can scan for WiFi access points and measure the
+            signal strength to each network.
+
+        - The device determines the location of each access point by looking it up in a
+            WiFi location database.
+
+        - Then the device estimates its own location using the locations and signal 
+            strengths of the networks.
+
+
+    - Cell Tower Triangulation
+
+        - In the US, cellular phones are required to report approximate locations for
+            911 emergency calls.  If a cell phone is unable to use GPS, it can use
+            cell tower triangulation.
+
+        - A cell tower is 3 sets of directional antenna arrays in a triangular shape.
+
+        - The cell tower can estimate the distance between the tower and a phone by
+            measuring the round-trip delivery time and signal strength.
+
+        - A rough location can be obtained by doing this with each array from a single
+            tower, but multiple towers will help narrow the location to a smaller area.
+
+
+    - IP-Based Geolocation
+
+        - IP geolocation databases contain millions of rows mapping IP addresses to 
+            locations.  They are created from sources such as regional IP registries,
+            user-submitted locations on websites, data from ISPs, and estimates based
+            on network routes.
+
+        - This is the last resort for geolocation, since it is the least accurate.
+
+        - Using a VPN will make this method impossible.
+
+
+
+- Security Risks
+
+    - Phishing and Spear-Phishing
+
+
+    - Rogue Wireless Access Points
+        - Passive Interception
+        - Active Interception
+        - Use VPNs or HTTPS
+
+
+    - Malware Types
+
+        - Trojan Horse = masquerades as a legitimate program
+
+        - Virus = self-replicating, copies itself into other files
+
+        - Worm = self-replicating, copies itself onto different computers across the network
+
+        - Example - ILOVEYOU worm that infected Windows machines in 2000
+            1. User opens email attachment, which is actually an executable program
+            2. Program overwrites certain files with a copy of itself
+            3. Program sends email to all contacts in Outlook address book
+
+
+    - Effects of Malware
+
+        - Spyware = steals data and sends it back to the malware creators (ie keyloggers)
+
+        - Adware = pops up advertisements to users
+
+        - Ransomware = encrypts user data and demands ransom for decryption key
+                         (ie WannaCry in 2017)
+
+        - Cryptomining = utilizes a computer's resources to mine for cryptocurrency
+
+
+    - Protection
+
+        - Security Patches = update to application or OS that fixes exploited bug
+
+        - Firewalls = monitor incoming and outgoing traffic and block suspicious traffic
+
+        - Antivirus software = scan files and folders looking for malware
