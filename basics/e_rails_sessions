@@ -1,0 +1,102 @@
+-------------------------------------------------------------------------------
+| PART E - RAILS SESSIONS                                                     |
+-------------------------------------------------------------------------------
+
+- Rails Sessions
+
+    - Sessions are used when you want to store data about a user between requests.
+
+        # Set session in a controller method
+        def create
+          session[:current_user_id] = @user.id
+        end
+
+        # Read it in another
+        def index
+          current_user = User.find_by_id(session[:current_user_id])
+        end
+
+
+    - By default, Rails stores this data in a secure cookie.  When the user requests a webpage,
+        the server can set a cookie.  Until the cookie expires, the client will send the
+        cookie back with each request.
+
+        # Request a webpage
+        $ curl -I http://www.google.com | grep Set-Cookie
+
+        Set-Cookie: NID=67=J2xeyegolV0SSneukSOANOCoeuDQs7G1FDAK2j-nVyaoejz-4K6aouUQtyp5B_rK3Z7G-Ew
+                      TIzDm7XQ3_ZUVNnFmlGfIHMAnZQNd4kM89VLzCsM0fZnr_N8-idASAfBEdS; 
+                      expires=Wed, 16-Sep-2015 05:44:42 GMT; path=/; domain=.google.com; HttpOnly
+
+
+        # Send cookie with next request
+        ...
+        > GET / HTTP/1.1
+        > User-Agent: curl/7.37.1
+        > Host: www.google.com
+        > Accept: */*
+        > Cookie: NID=67=J2xeyegolV0SSneukSOANOCoeuDQs7G1FDAK2j-nVyaoejz-4K6aouUQtyp5B_rK3Z7G-Ew
+                    TIzDm7XQ3_ZUVNnFmlGfIHMAnZQNd4kM89VLzCsM0fZnr_N8-idASAfBEdS; 
+                    expires=Wed, 16-Sep-2015 05:44:42 GMT; path=/; domain=.google.com; HttpOnly
+        ...
+
+
+    - Why are cookies not always the best way to store session data?
+
+        - Cookies have a 4KB limit
+        - Cooies are sent along with every request, so they might slow the site down
+        - If you accidentally expose your SECRET_KEY_BASE, your users can change the cookies
+        - If the cookies include the user id, they could impersonate any user!
+        - If you store the wrong type of data in the cookie, you're vulnerable to replay attacks
+
+
+    - Alternative session stores
+
+        - ActiveRecord
+
+            - If you call 'session[:current_user_id] = 1' in your app and a session doesn't
+                already exist, rails will create a new session in the 'sessions' table with a
+                random session id (ie 09497d46978bf6f3).
+
+            - It will store '{current_user_id: 1}' (Base64-encoded) in the 'data' attribute of
+                that record.  
+
+            - It will return the session id 09497d46978bf6f3 to the browser using 'Set-Cookie'.
+
+            - On subsequent requests, the browser sends the cookie to your app:
+
+                Cookie: _my_app_session=09497d46978bf6f32265fefb5cc52264; path=/; HttpOnly
+
+            - When you call 'session[:current_user_id]' in your application, your app grabs the
+                session id from the cookie and finds the record in the 'sessions' table.
+                Then it retuns the 'current_user_id' from the 'data' attribute.
+
+            - Your sessions may not get cleaned up automatically, and if so, you'll have to
+                clean them up on your own.
+
+            - This same flow is used for every non-cookie session store.
+
+
+        - Memcached or Redis using the cache store
+
+            - The good thing about the cache is that it's small and will automatically clean
+                up older entries.
+
+            - The bad thing is that you might not want to delete those older sessions so fast
+                and you may not have direct control over it.
+
+            - Your session data and other cached data will be fighting for space.  You may have
+                a lot of cache misses if you don't have enough memory.
+
+            - If you ever have to reset your cache (like during a release) everyone's sessions
+                will be deleted.
+
+
+
+- Rails Architecture
+
+    - Request ->  
+      Web Server (Apache or Nginx)  ->  
+      Application Server (Passenger, Unicorn, Puma, Mongrel, etc.)  ->
+      Rack ->
+      Application (Rails, Sinatra, etc.)
