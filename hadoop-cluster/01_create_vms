@@ -1,0 +1,123 @@
+-----------------------------------------------------------------------
+|  CHAPTER 1 - CREATING THE VMS                                       |
+-----------------------------------------------------------------------
+
+- Instructions
+
+    Part 1
+    ------------------
+    https://techanswersweb.wordpress.com/2017/07/02/cloudera-manager-installation-
+    on-google-cloud-part-1creating-virtual-machines-on-google-cloud/
+
+    Part 2
+    ------------------
+    https://techanswersweb.wordpress.com/2017/07/10/cloudera-manager-installation-on-google-
+    cloud-part-2configure-the-server-and-install-cloudera-manager/
+
+    Part 3
+    ------------------
+    https://techanswersweb.wordpress.com/2017/07/22/cloudera-manager-installation-on-google-
+    cloud-part-3assigning-roles-to-different-nodes/
+
+    RHEL 7
+    ------------------
+    https://techanswersweb.wordpress.com/2018/11/19/node-configuration-in-redhat-version-7/
+
+
+
+- Adding the VMs
+
+    - Create a new project for the Hadoop cluster.
+
+
+    - Now, add each of the 4 VMs:
+
+        Name > Any name
+        Zone > Any zone
+        Machine Type > Increase to 8GB RAM
+        Boot Disk > RHEL 7, 32 GB
+        Identity and API Access > Leave as is
+        Firewall > Allow HTTP Traffic
+
+
+
+- Configuring the VMs
+
+    - Log into the first node.
+
+        $ gcloud compute ssh hadoop-node-1
+
+
+    - Create a new user account.
+
+        $ sudo useradd cmuser
+        $ sudo passwd cmuser
+
+
+    - Add the new user to the sudoers.
+
+        $ sudo visudo
+
+        # Add this below root user
+        cmuser            ALL=(ALL)        NOPASSWD: ALL
+
+
+    - Switch to the new user
+
+        $ su - cmuser
+
+
+    - Disable the firewall
+
+        $ sudo systemctl stop firewalld.service
+        $ sudo systemctl disable firewalld.service
+
+
+    - Disable SELinux
+
+        $ sudo vi /etc/selinux/config
+
+        # Change 'selinux' from 'enforcing' to 'disabled'
+
+
+    - Disable Transparent Hugepage (THP)
+
+        $ sudo vi /etc/rc.d/rc.local
+
+        # Add these lines
+        echo never > /sys/kernel/mm/transparent_hugepage/enabled
+        echo never > /sys/kernel/mm/transparent_hugepage/defrag
+
+
+    - Set vm.swappiness
+
+        $ sudo vi /etc/sysctl.conf
+
+        # Add this line
+        vm.swappiness=10
+
+
+    - Configure ssh
+
+        $ sudo vi /etc/ssh/sshd_config
+
+        # Uncomment port 22 if you connect to your nodes through putty (I didn't do this)
+        # Change 'PermitRootLogin' from 'no' to 'yes'
+        # Change 'PasswordAuthentication' from 'no' to 'yes'
+        # Change 'ChallengeResponseAuthentication' from 'no' to 'yes'
+
+
+    - Set a password for root
+
+        $ sudo passwd
+
+
+    - Install wget and httpd
+
+        $ sudo yum -y install wget
+        $ sudo yum -y install httpd
+
+
+    - Reboot the VM.
+
+        $ init 6
