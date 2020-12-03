@@ -1,0 +1,42 @@
+-----------------------------------------------------------------------
+|  CHAPTER 2 - CLOUDERA MANAGER                                       |
+-----------------------------------------------------------------------
+
+- Next, we're going to install Cloudera Manager on our first node.
+
+    - Download the installer
+
+        # Need to run installer as root
+        $ su - root
+
+        $ wget https://archive.cloudera.com/cm6/6.3.1/cloudera-manager-installer.bin
+
+
+    - Give the installer permissions.
+
+        $ chmod u+x cloudera-manager-installer.bin
+
+
+    - Run the installer
+
+        $ ./cloudera-manager-installer.bin
+
+
+
+- Create a firewall exception to allow traffic to the cloudera manager console.
+
+    > Networking > Firewall
+    > New Firewall Rule
+    > All IP addresses
+    > IP ranges: 0.0.0.0/0
+    > Port: tcp/7180
+
+  Instructions:
+    https://www.youtube.com/watch?reload=9&v=JmjqPpQdtW8
+
+
+
+- Next, we can switch the default PostgreSQL database to use MySQL instead.
+
+    https://techanswersweb.wordpress.com/2018/11/20/install-and-configure-mysql-
+    for-cloudera-software/
