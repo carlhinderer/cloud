@@ -36,7 +36,8 @@
 
 
 
-- Next, we can switch the default PostgreSQL database to use MySQL instead.
+- Next, we can switch the default PostgreSQL database to use MySQL instead if we want.
+    (Skipping this for now.)
 
     https://techanswersweb.wordpress.com/2018/11/20/install-and-configure-mysql-
     for-cloudera-software/

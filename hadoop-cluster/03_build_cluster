@@ -1,0 +1,35 @@
+-----------------------------------------------------------------------
+|  CHAPTER 3 - BUILDING THE CLUSTER                                   |
+-----------------------------------------------------------------------
+
+- When the installation has progressed, you will need to log into the Cloudera manager.
+
+    http://hadoop-node-1:7180
+
+    u: admin
+    p: admin
+
+  Then, you can finish setting up the installation.
+
+
+
+- First, we need to start SSHD on all of our instances.
+
+    # Log into each instance
+    $ gcloud compute ssh hadoop-node-2
+
+    # Set up root password
+    $ sudo passwd
+    $ su - root
+
+    # Start the ssh service
+    $ service sshd start
+
+
+
+- In the Cloudera installer UI, enter the IP addresses of all 4 of your VM instances.
+    Use the 'Internal IP' from the cloud console.
+
+
+
+- For the credentials, use the username 'cmuser' and the password you created for it.
